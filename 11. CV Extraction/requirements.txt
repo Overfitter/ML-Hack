@@ -1,0 +1,3 @@
+pandas
+pdfminer3
+nltk
