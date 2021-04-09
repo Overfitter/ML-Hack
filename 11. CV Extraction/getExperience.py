@@ -114,7 +114,6 @@ def getExperience(text, company_output, title_output, date_output):
             except Exception as e:
                 continue
         out_ls = sorted(out_ls, key = lambda i: (i['company_name'], i['title_words']), reverse=False)
-        out_ls = list({i['company_name']:i for i in reversed(out_ls)}.values()) ## Remove dups
     else:
         return []
     
@@ -137,29 +136,45 @@ def getExperience(text, company_output, title_output, date_output):
                         _dict['date_words'] = len(clean_txt[company_end_idx:date_start_idx].strip().split())
 
                     if _dict['date_words'] > 50: ## If # of words between company & date exceed 50 then don't assign [Assumption]
-                        _dict['period'] = ''
-
+                        continue
                     ls.append(_dict)
                 full_ls.append(min(ls, key=lambda x:x['date_distance']))
             except Exception as e:
                 continue
-    
-        other_companies = list(set([i['keyword'] for i in company_output]) - set([i['company_name'] for i in full_ls]))
+        if len(full_ls) > 0:
+            other_companies = list(set([i['keyword'] for i in company_output]) - set([i['company_name'] for i in full_ls]))
+            other_ls = []
+            for comp in other_companies:
+                _dict = {'company_name': '', 
+                         'title': '',
+                         'period': '',
+                         'title_distance': '',
+                         'date_distance': '',
+                         'title_words': '',
+                         'date_words': ''}
+                _dict['company_name'] = comp
+                other_ls.append(_dict)
+            full_ls = sorted(full_ls, key = lambda i: (i['company_name'], i['title_words'], i['date_words']), reverse=False)
+            full_ls = list({i['company_name']:i for i in reversed(full_ls)}.values()) ## Remove dups
+            final_ls = full_ls + other_ls
+            return final_ls
+        else:
+            out_ls = list({i['company_name']:i for i in reversed(out_ls)}.values())
+            other_companies = list(set([i['keyword'] for i in company_output]) - set([i['company_name'] for i in out_ls]))
+            other_ls = []
+            for comp in other_companies:
+                _dict = {'company_name': '', 
+                         'title': '',
+                         'period': '',
+                         'title_distance': '',
+                         'date_distance': '',
+                         'title_words': '',
+                         'date_words': ''}
+                _dict['company_name'] = comp
+                other_ls.append(_dict)
 
-        other_ls = []
-        for comp in other_companies:
-            _dict = {'company_name': '', 
-                     'title': '',
-                     'period': '',
-                     'title_distance': '',
-                     'date_distance': '',
-                     'title_words': '',
-                     'date_words': ''}
-            _dict['company_name'] = comp
-            other_ls.append(_dict)
-
-        final_ls = full_ls + other_ls
-        
-        return final_ls
+            final_ls = out_ls + other_ls
+            return final_ls
     else:
+        out_ls = list({i['company_name']:i for i in reversed(out_ls)}.values()) ## Remove dups
         return out_ls
