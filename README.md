@@ -1,4 +1,4 @@
-<h1 align="center">🚀 NLP-Hack</h1>
+<h1 align="center">🚀 ML-Hack</h1>
 
 <p align="center">Natural Language Processing - Solutions Repository</p>
 <p align="center">
