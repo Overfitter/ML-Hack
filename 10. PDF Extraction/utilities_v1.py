@@ -1172,7 +1172,7 @@ def section_correction(df, column='section'):
 #########################################################################################################################################
 
 if __name__=='__main__':
-    PATH = r'C:/mihir/ADS/ZS/3_zs_BMS_SOAP_Ankush/Mihir/SOAP_pilot_code'
+    PATH = r'C://'
     data_dic = pickle.load(open(r'dataDic_v5.pickle', 'rb'))
     #prot_name = 'ca209742-revprot01'
     prot_name = 'ca012004-prot'
